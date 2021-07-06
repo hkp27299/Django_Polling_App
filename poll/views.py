@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from .models import userModel
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
@@ -21,9 +20,20 @@ def signIn(request):
         user = authenticate(username = obj['fname'], password = obj['psw'])
         if user is not None:
             message = "user successfully signed in"
+            return render(request,'home.html')
         else:
             message = 'Either password or username is wrong'
 
     template = 'signin.html'
     context = {'message':message}
+    return render(request,template,context)
+
+def createPoll(request):
+    template = 'createPoll.html'
+    context = {}
+    return render(request,template,context)
+
+def viewPoll(request):
+    template = 'viewPoll.html'
+    context = {}
     return render(request,template,context)

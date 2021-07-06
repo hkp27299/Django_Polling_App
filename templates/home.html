@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="stylesheet" href="{% static 'button.css' %}">
+
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+      <span class='create'><a href="{% url 'create' %}"></a></span>
+      <span class='view'><a href="{% url 'view' %}"></a></span>
+
+    </body>
+</html>
