@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from .forms import createPollForm
 
 def signUp(request):
     obj = request.POST or None
@@ -19,8 +21,12 @@ def signIn(request):
     if obj:
         user = authenticate(username = obj['fname'], password = obj['psw'])
         if user is not None:
-            message = "user successfully signed in"
-            return render(request,'home.html')
+            login(request, user)
+            if request.GET.get('next') != None:
+                return redirect(request.GET.get('next'))
+            else:
+                return render(request,'home.html')
+
         else:
             message = 'Either password or username is wrong'
 
@@ -28,12 +34,23 @@ def signIn(request):
     context = {'message':message}
     return render(request,template,context)
 
-def createPoll(request):
+@login_required(login_url='signin')
+def createPollView(request):
+    form = createPollForm(request.POST or None)
+    if form.is_valid():
+
+        obj = form.save(commit=False)
+        obj.user = request.user
+        obj.save()
+
+        form = createPollForm()
+
     template = 'createPoll.html'
-    context = {}
+    context = {'form':form}
     return render(request,template,context)
 
-def viewPoll(request):
+@login_required(login_url='signin')
+def viewPollView(request):
     template = 'viewPoll.html'
     context = {}
     return render(request,template,context)

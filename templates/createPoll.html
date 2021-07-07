@@ -1,1 +1,23 @@
-<h1>hello</h1>
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static 'submitButton.css' %}">
+
+
+    <title></title>
+  </head>
+  <body>
+    <form method="post">{% csrf_token %}
+<h3>* Seprate options with ','</h3>
+      {{form.as_p}}
+  <div class="wrapper">
+  <button class="">
+    <span>Submit</span>
+    </button>
+</div>
+    </form>
+  </body>
+</html>

@@ -1,12 +1,10 @@
 from django.urls import path
-from .views import signUp,signIn,createPoll,viewPoll
+from .views import signUp,signIn,createPollView,viewPollView
 
 urlpatterns = [
     path('signup/', signUp,name='signup'),
     path('signin/', signIn,name='signin'),
-    path('create/', createPoll,name='create'),
-    path('view/', viewPoll,name='view'),
-
-
+    path('create/', createPollView,name='create'),
+    path('view/', viewPollView,name='view'),
 
 ]
