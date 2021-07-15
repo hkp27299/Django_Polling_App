@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .forms import createPollForm
+from .models import createPoll
 
 def signUp(request):
     obj = request.POST or None
@@ -51,6 +52,7 @@ def createPollView(request):
 
 @login_required(login_url='signin')
 def viewPollView(request):
+    obj = createPoll.objects.all()
     template = 'viewPoll.html'
-    context = {}
+    context = {'obj':obj}
     return render(request,template,context)
