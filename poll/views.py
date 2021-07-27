@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import createPollForm
 from .models import createPoll
 
+
 def signUp(request):
     obj = request.POST or None
     if obj is not None:
