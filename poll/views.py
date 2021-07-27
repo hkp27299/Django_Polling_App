@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -42,6 +42,8 @@ def createPollView(request):
 
         obj = form.save(commit=False)
         obj.user = request.user
+        obj.options = dict((x.strip(),0) for x in obj.options.split(','))
+        print(obj.options)
         obj.save()
 
         form = createPollForm()
@@ -56,3 +58,11 @@ def viewPollView(request):
     template = 'viewPoll.html'
     context = {'obj':obj}
     return render(request,template,context)
+
+@login_required(login_url='signin')
+def vote(request,title,selectedoption):
+    obj = createPoll.objects.get(title=title)
+    dict = obj.options
+    dict.update({selectedoption: obj.options[selectedoption]+1})
+    obj.save()
+    return redirect('view')
