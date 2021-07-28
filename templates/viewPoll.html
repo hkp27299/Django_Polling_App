@@ -9,6 +9,14 @@
 
     <meta charset="utf-8">
     <title></title>
+
+
+    <style>
+    ul {
+  text-align: center;
+  list-style: inside;
+}
+</style>
   </head>
   <body>
 <br>
@@ -19,6 +27,8 @@
 
       <div class="card-header text-center">
         {{i.title}}
+        
+
       </div>
 
        {% for option,value in i.options.items %}
@@ -35,6 +45,8 @@
 
       </div>
     </div><br>
+
+
 {% endfor %}
 
 

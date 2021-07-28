@@ -8,3 +8,4 @@ class createPoll(models.Model):
     user = models.ForeignKey(User,on_delete = models.CASCADE)
     title = models.CharField(max_length = 300, blank = False)
     options = PickledObjectField(editable = True)
+    voters = PickledObjectField(editable = True, null=True)

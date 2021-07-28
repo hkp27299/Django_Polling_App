@@ -101,6 +101,13 @@ button:hover {
 
     <div class="clearfix">
       <button type="submit" class="signupbtn">Sign Up</button>
+{% if message != '' %}
+<script>
+
+    alert('{{ message }}');
+
+</script>
+{% endif %}
 
     </div>
 

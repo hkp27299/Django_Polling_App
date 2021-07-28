@@ -4,17 +4,22 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .forms import createPollForm
 from .models import createPoll
-
+from django.contrib import messages
 
 def signUp(request):
+    message = ''
     obj = request.POST or None
     if obj is not None:
-        user = User.objects.create_user(obj['fname'], obj['email'],obj['psw'])
-        user.last_name = obj['lname']
-        user.first_name = obj['fname']
-        user.save()
+        if obj['psw'] != obj['psw-repeat']:
+            message = 'PasswordValidation Error'
+
+        else:
+            user = User.objects.create_user(obj['fname'], obj['email'],obj['psw'])
+            user.last_name = obj['lname']
+            user.first_name = obj['fname']
+            user.save()
     template = 'signup.html'
-    context = {}
+    context = {'message':message}
     return render(request,template,context)
 
 def signIn(request):
@@ -44,6 +49,7 @@ def createPollView(request):
         obj = form.save(commit=False)
         obj.user = request.user
         obj.options = dict((x.strip(),0) for x in obj.options.split(','))
+        obj.voters = ['None']
         print(obj.options)
         obj.save()
 
@@ -55,6 +61,7 @@ def createPollView(request):
 
 @login_required(login_url='signin')
 def viewPollView(request):
+
     obj = createPoll.objects.all()
     template = 'viewPoll.html'
     context = {'obj':obj}
@@ -63,7 +70,15 @@ def viewPollView(request):
 @login_required(login_url='signin')
 def vote(request,title,selectedoption):
     obj = createPoll.objects.get(title=title)
-    dict = obj.options
-    dict.update({selectedoption: obj.options[selectedoption]+1})
-    obj.save()
+
+    if obj.user in obj.voters:
+        messages.add_message(request, messages.INFO, 'Alredy Voted for above question.')
+
+    else:
+
+        obj.user = request.user
+        dict = obj.options
+        obj.voters.append(obj.user)
+        dict.update({selectedoption: obj.options[selectedoption]+1})
+        obj.save()
     return redirect('view')
