@@ -71,14 +71,12 @@ def viewPollView(request):
 def vote(request,title,selectedoption):
     obj = createPoll.objects.get(title=title)
 
-    if obj.user in obj.voters:
+    if request.user in obj.voters:
         messages.add_message(request, messages.INFO, 'Alredy Voted for above question.')
 
     else:
-
-        obj.user = request.user
         dict = obj.options
-        obj.voters.append(obj.user)
+        obj.voters.append(request.user)
         dict.update({selectedoption: obj.options[selectedoption]+1})
         obj.save()
     return redirect('view')
